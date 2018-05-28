@@ -102,16 +102,22 @@ public class OutputHandler {
             Row outputRow = sheet.createRow(currentRow);
             for(int i=0; i<rowEntry.getRow().getPhysicalNumberOfCells(); i++){
 
+                    Cell from = rowEntry.getRow().getCell(i);
 
-                Cell from = rowEntry.getRow().getCell(i);
-                Cell to = outputRow.createCell(i, from.getCellTypeEnum());
 
-                    switch (from.getCellTypeEnum()){
-                        case STRING: to.setCellValue(from.getStringCellValue()); break;
-                        case NUMERIC: setCellStyle(from, to); to.setCellValue(from.getNumericCellValue()); break;
-                        default:
-                            System.out.println("unrecognised type: " + from.getCellTypeEnum());
+                    if(from != null){
+                        Cell to = outputRow.createCell(i, from.getCellTypeEnum());
+                        switch (from.getCellTypeEnum()){
+                            case STRING: to.setCellValue(from.getStringCellValue()); break;
+                            case NUMERIC: setCellStyle(from, to); to.setCellValue(from.getNumericCellValue()); break;
+                            default:
+                                System.out.println("unrecognised type: " + from.getCellTypeEnum());
+                        }
+                    }else{
+                        Cell to = outputRow.createCell(i, CellType.STRING);
+                        to.setCellValue("");
                     }
+
             }
             Cell adjustedCell = outputRow.createCell(headerCell, CellType.NUMERIC);
             adjustedCell.setCellValue(rowEntry.getAdjustedConAmountPretty().toPlainString());
@@ -127,30 +133,36 @@ public class OutputHandler {
 
 
             Cell from = rowEntry.getRow().getCell(i);
-            Cell to = outputRow.createCell(i, from.getCellTypeEnum());
 
-            if(i==RowConstants.CON_AMOUNT){
-                to.setCellValue(currencyPair.getTotalAdjustedConAmount().doubleValue());
-            }
-            else if(i==RowConstants.RATE){
-                to.setCellValue(currencyPair.getWeightedAverage().doubleValue());
-            }
-            else if(i==RowConstants.COU_AMOUNT){
-                BigDecimal adjustedCouAmount = currencyPair.getTotalAdjustedConAmount().multiply(currencyPair.getWeightedAverage());
-                adjustedCouAmount = adjustedCouAmount.setScale(2, RoundingMode.UP);
-                to.setCellValue(adjustedCouAmount.doubleValue());
-            }
-            else if(i==RowConstants.TRADE_NUMBER){
-                // blank out
-            }
-            else{
-                switch (from.getCellTypeEnum()){
-                    case STRING: to.setCellValue(from.getStringCellValue()); break;
-                    case NUMERIC: setCellStyle(from, to); to.setCellValue(from.getNumericCellValue()); break;
-                    default:
-                        System.out.println("unrecognised type: " + from.getCellTypeEnum());
+            if(from != null){
+                Cell to = outputRow.createCell(i, from.getCellTypeEnum());
+
+                if(i==RowConstants.CON_AMOUNT){
+                    to.setCellValue(currencyPair.getTotalAdjustedConAmount().doubleValue());
                 }
+                else if(i==RowConstants.RATE){
+                    to.setCellValue(currencyPair.getWeightedAverage().doubleValue());
+                }
+                else if(i==RowConstants.COU_AMOUNT){
+                    BigDecimal adjustedCouAmount = currencyPair.getTotalAdjustedConAmount().multiply(currencyPair.getWeightedAverage());
+                    adjustedCouAmount = adjustedCouAmount.setScale(2, RoundingMode.UP);
+                    to.setCellValue(adjustedCouAmount.doubleValue());
+                }
+                else if(i==RowConstants.TRADE_NUMBER){
+                    // blank out
+                }
+                else{
+                    switch (from.getCellTypeEnum()){
+                        case STRING: to.setCellValue(from.getStringCellValue()); break;
+                        case NUMERIC: setCellStyle(from, to); to.setCellValue(from.getNumericCellValue()); break;
+                        default:
+                            System.out.println("unrecognised type: " + from.getCellTypeEnum());
+                    }
 
+                }
+            }else{
+                Cell to = outputRow.createCell(i, CellType.STRING);
+                to.setCellValue("");
             }
 
 

@@ -24,7 +24,7 @@ public class Parser {
     {
         System.out.println("start");
 //        String fileName = "src/main/resources/Testdata2.xlsm";
-//        String fileName = "src/main/resources/Testdata2.xlsx";
+//        String fileName = "src/main/resources/Testdata5.xlsx";
         String fileName = JOptionPane.showInputDialog("input file");
         Workbook wb = readFile(fileName);
 
@@ -39,9 +39,9 @@ public class Parser {
 
             if(row != null){
                 String tradeNumber = row.getCell(RowConstants.TRADE_NUMBER, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                String counterPartyId = row.getCell(RowConstants.COUNTER_PARTY, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                String currencyPair = row.getCell(RowConstants.CURRENCY_PAIR, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
-                String buySell = row.getCell(RowConstants.BUY_SELL, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue();
+                String counterPartyId = row.getCell(RowConstants.COUNTER_PARTY, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
+                String currencyPair = row.getCell(RowConstants.CURRENCY_PAIR, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
+                String buySell = row.getCell(RowConstants.BUY_SELL, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue().trim();
                 BigDecimal conAmount = new BigDecimal(row.getCell(RowConstants.CON_AMOUNT, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue());
                 BigDecimal rate = new BigDecimal(row.getCell(RowConstants.RATE, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue());
                 RowEntry entry = new RowEntry(row, tradeNumber, currencyPair, buySell, conAmount, rate);
