@@ -84,7 +84,7 @@ public class OutputHandler {
 
         Row toRow = toSheet.createRow(0);
 
-        for(headerCell=0; headerCell<headers.getPhysicalNumberOfCells(); headerCell++){
+        for(headerCell=0; headerCell<headers.getLastCellNum(); headerCell++){
             Cell from = headers.getCell(headerCell);
             Cell to = toRow.createCell(headerCell, from.getCellTypeEnum());
             to.setCellValue(from.getStringCellValue());
@@ -100,7 +100,7 @@ public class OutputHandler {
             currentRow++;
 
             Row outputRow = sheet.createRow(currentRow);
-            for(int i=0; i<rowEntry.getRow().getPhysicalNumberOfCells(); i++){
+            for(int i=0; i<rowEntry.getRow().getLastCellNum(); i++){
 
                     Cell from = rowEntry.getRow().getCell(i);
 
@@ -129,7 +129,7 @@ public class OutputHandler {
         weightCurrentRow++;
 
         Row outputRow = weightedSheet.createRow(weightCurrentRow);
-        for(int i=0; i<rowEntry.getRow().getPhysicalNumberOfCells(); i++){
+        for(int i=0; i<rowEntry.getRow().getLastCellNum(); i++){
 
 
             Cell from = rowEntry.getRow().getCell(i);
@@ -145,6 +145,7 @@ public class OutputHandler {
                 }
                 else if(i==RowConstants.COU_AMOUNT){
                     BigDecimal adjustedCouAmount = currencyPair.getTotalAdjustedConAmount().multiply(currencyPair.getWeightedAverage());
+                    adjustedCouAmount = adjustedCouAmount.negate();
                     adjustedCouAmount = adjustedCouAmount.setScale(2, RoundingMode.UP);
                     to.setCellValue(adjustedCouAmount.doubleValue());
                 }
