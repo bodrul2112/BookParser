@@ -93,8 +93,8 @@ public class CurrencyPair {
                 }
             }
 
-            weightedAverage = accumulateRate.divide(accumulateAdjustedConAmount, 6, RoundingMode.UP);
-            totalAdjustedConAmount = accumulateAdjustedConAmount.setScale(2, RoundingMode.UP);
+            weightedAverage = accumulateRate.divide(accumulateAdjustedConAmount, 6, RoundingMode.HALF_UP);
+            totalAdjustedConAmount = accumulateAdjustedConAmount.setScale(2, RoundingMode.HALF_UP);
 //            weightedAverage = weightedAverage.setScale(6, RoundingMode.UP);
 
         }else {
@@ -112,8 +112,8 @@ public class CurrencyPair {
                 }
             }
 
-            weightedAverage = accumulateRate.divide(accumulateAdjustedConAmount, 6, RoundingMode.UP);
-            totalAdjustedConAmount = accumulateAdjustedConAmount.setScale(2, RoundingMode.UP).negate();
+            weightedAverage = accumulateRate.divide(accumulateAdjustedConAmount, 6, RoundingMode.HALF_UP);
+            totalAdjustedConAmount = accumulateAdjustedConAmount.setScale(2, RoundingMode.HALF_UP).negate();
 //            weightedAverage = weightedAverage.setScale(6, RoundingMode.UP);
         }
     }

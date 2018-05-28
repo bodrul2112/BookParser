@@ -146,7 +146,7 @@ public class OutputHandler {
                 else if(i==RowConstants.COU_AMOUNT){
                     BigDecimal adjustedCouAmount = currencyPair.getTotalAdjustedConAmount().multiply(currencyPair.getWeightedAverage());
                     adjustedCouAmount = adjustedCouAmount.negate();
-                    adjustedCouAmount = adjustedCouAmount.setScale(2, RoundingMode.UP);
+                    adjustedCouAmount = adjustedCouAmount.setScale(2, RoundingMode.HALF_UP);
                     to.setCellValue(adjustedCouAmount.doubleValue());
                 }
                 else if(i==RowConstants.TRADE_NUMBER){
