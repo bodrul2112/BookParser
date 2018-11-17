@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Row;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class CounterParty {
 
@@ -30,24 +31,49 @@ public class CounterParty {
         sells.put(rowEntry.getCurrencyPair(), rowEntry);
     }
 
+    public static boolean isSwapOrFwd(String tradeId){
+        return tradeId.contains("FW") || tradeId.contains("F1");
+    }
 
     public List<CurrencyPair> getCcyData() {
         return ccyData;
     }
 
+    public static Comparator<RowEntry> comparator = (o1, o2) -> {
+
+        if(isSwapOrFwd(o1.getTradeId()) && !isSwapOrFwd(o2.getTradeId())){
+            return -1;
+        } else if(!isSwapOrFwd(o1.getTradeId()) && isSwapOrFwd(o2.getTradeId())){
+            return 1;
+        }
+
+        return Integer.compare(o1.getNum(), o2.getNum());
+    };
+
+    //testing
+//    public static void main(String[] args) {
+//
+//        List<RowEntry> enties = dummyEntries("1","2","3","1","2","3","1","2","3","1","2","3","1","2","3","1","2","3","1","2","3.F1","3.FW","4");
+////        List<RowEntry> enties = dummyEntries("3","2","1");
+//        enties.sort(comparator);
+//        System.out.println(enties);
+//
+//    }
+//
+//    static List<RowEntry> dummyEntries(String... tradeIds){
+//        List<RowEntry> enties = new ArrayList<>();
+//
+//        for (String tradeId : tradeIds) {
+//            enties.add(dummyRow(tradeId));
+//        }
+//        return enties;
+//    }
+//
+//    static RowEntry dummyRow(String tradeId){
+//        return new RowEntry(null, tradeId,null, null, new BigDecimal(1), null);
+//    }
+
     public void calculateTotals() {
-
-
-        Comparator<RowEntry> comparator = (o1, o2) -> {
-
-            if(o1.getTradeId().contains("FW") && !o2.getTradeId().contains("FW")){
-                return -1;
-            } else if(!o1.getTradeId().contains("FW") && o2.getTradeId().contains("FW")){
-                return -1;
-            }
-
-            return Integer.compare(o1.getNum(), o2.getNum());
-        };
 
         for(String currencyPair: currencyPairs){
 
